@@ -21,6 +21,22 @@ public class RatingService {
 
         RatingService r = new RatingService();
 
+        //testing document
+        Document document = new Document("doc123" );
+        document.setRating("like");
+        document.setRating("dislike");
+        document.setRating("like");
+        document.setRating("dislike");
+        System.out.println(document.getRates());
+
+        document.setTags("užitečné");
+        document.setTags("nepřehledné");
+        document.setTags("aktuální");
+        document.setTags("irelevantní");
+        System.out.println(document.getTags());
+
+
+
         r.onNewHashTag("doc1");
         r.onNewHashTag("doc2");
         r.onNewHashTag("doc2");
