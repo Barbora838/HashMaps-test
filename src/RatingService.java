@@ -1,16 +1,16 @@
 import java.util.HashMap;
-import java.util.function.Function;
 import java.util.Map;
-import java.util.Iterator;
 
 public class RatingService {
 
     private final Map<String, Document> allDocuments = new HashMap<>();
 
-    public void onNewHashTag(String name) {
+    public void like(final String docId) {
+        allDocuments.computeIfAbsent(docId, Document::new).like();
+    }
 
-        Document document = allDocuments.computeIfAbsent(name, s -> new Document(s));
-        document.incrementCount();
+    public void dislike(final String docId) {
+        allDocuments.computeIfAbsent(docId, Document::new).dislike();
     }
 
     public Map<String, Document> getAllDocuments() {
@@ -21,28 +21,18 @@ public class RatingService {
 
         RatingService r = new RatingService();
 
-        //testing document
-        Document document = new Document("doc123" );
-        document.setRating("like");
-        document.setRating("dislike");
-        document.setRating("like");
-        document.setRating("dislike");
-        System.out.println(document.getRates());
+        r.like("doc123");
+        r.like("doc123");
 
-        document.setTags("užitečné");
-        document.setTags("nepřehledné");
-        document.setTags("aktuální");
-        document.setTags("irelevantní");
-        System.out.println(document.getTags());
+        r.dislike("doc123");
+        r.dislike("doc123");
 
+        final double rating = r.getAllDocuments().get("doc123").getDocumentRating();
+        if (rating == 0.5d) {
+            System.out.println("CORRECT");
+        } else {
+            System.out.println("ERROR");
+        }
 
-
-        r.onNewHashTag("doc1");
-        r.onNewHashTag("doc2");
-        r.onNewHashTag("doc2");
-        r.onNewHashTag("doc3");
-        r.onNewHashTag("doc4");
-
-        System.out.println(r.getAllDocuments());
     }
 }

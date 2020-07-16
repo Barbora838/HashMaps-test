@@ -1,56 +1,52 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Document {
-    private String name;
-    private List<String> rates = new ArrayList<>();
-    private List<String> tags = new ArrayList<>();
-    public int counter;
 
-    public Document(String n) {
-        this.name = n;
+    // jaky je rozdil mezi final/non final variable?
+    // https://stackoverflow.com/questions/4399837/what-is-the-benefit-of-purely-functional-data-structure
+    private final String documentId;
+    private final AtomicInteger likes = new AtomicInteger(0);
+    private final AtomicInteger dislikes = new AtomicInteger(0);
+    // jaky je rozdil mezi HashMap a ConcurrentHashMap ?
+    private final Map<String, AtomicInteger> tags = new ConcurrentHashMap<>();
+
+    public Document(String docId) {
+        this.documentId = docId;
     }
 
-    public void incrementCount() {
-        counter++;
+    // TODO
+    // dopsat metodu pocitajici rating dokumentu
+    public double getDocumentRating() {
+        // TODO
+        return 0d;
     }
 
-    public String getName() {
-        return name;
+    public void like() {
+        likes.incrementAndGet();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void dislike() {
+        dislikes.incrementAndGet();
     }
 
-    public String toString(String n) {
-        return n.toString();
+    public void addTag(final String tag) {
+        tags.computeIfAbsent(tag.strip().toLowerCase(), t -> new AtomicInteger(0)).incrementAndGet();
     }
 
-    public void setRating(String rate) {
-        if (rate == "like") {
-            this.rates.add(rate);
-        } else if (rate == "dislike") {
-            this.rates.add(rate);
-        } else {
-            return;
-        }
-        counter++;
+    public Map<String, Integer> getTags() {
+        final Map<String, Integer> result = new HashMap<>();
+        this.tags.entrySet().forEach(e -> {
+            result.put(e.getKey(), e.getValue().get());
+        });
+        return result;
     }
 
-    public void setTags(String tag) {
-        if (tag == "užitečné" || tag == "aktuální" || tag == "jasné" || tag == "stručné" || tag == "objevné" ||
-                tag == "nepřehledné" || tag == "moc dlouhé" || tag == "příliš stručné" || tag == "nesrozumitelné" ||
-                tag == "irelevantní" || tag == "zastaralé") {
-            this.tags.add(tag);
-        }
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public List<String> getRates() {
-        return rates;
-    }
 
-    public List<String> getTags() {
-        return tags;
-    }
 }
