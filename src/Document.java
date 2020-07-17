@@ -19,11 +19,21 @@ public class Document {
 
     //metoda pocitajici rating dokumentu
     public double getDocumentRating() {
+        // returns 0 when both rating(likes & dislikes) are zero
+        if (this.likes.get() == 0 && this.dislikes.get() == 0) {
+            return 0.0;
+        }
+        //returns 100 when at least one of the rating(likes & dislikes) is zero
+        if (this.likes.get() == 0 && this.dislikes.get() == 0) {
+            return 100.0;
+        }
+
         double numLikes = this.likes.get();
         double numDislikes = this.dislikes.get();
-        double total = numLikes+numDislikes;
+        double total = numLikes + numDislikes;
+
         double percentage = (numLikes / total);
-        double result = percentage*100;
+        double result = percentage * 100;
         return result;
     }
 
