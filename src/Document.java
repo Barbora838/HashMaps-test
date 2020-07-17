@@ -17,11 +17,14 @@ public class Document {
         this.documentId = docId;
     }
 
-    // TODO
-    // dopsat metodu pocitajici rating dokumentu
+    //metoda pocitajici rating dokumentu
     public double getDocumentRating() {
-        // TODO
-        return 0d;
+        double numLikes = this.likes.get();
+        double numDislikes = this.dislikes.get();
+        double total = numLikes+numDislikes;
+        double percentage = (numLikes / total);
+        double result = percentage*100;
+        return result;
     }
 
     public void like() {
@@ -47,6 +50,5 @@ public class Document {
     public String getDocumentId() {
         return documentId;
     }
-
-
 }
+
